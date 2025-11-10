@@ -1,3 +1,4 @@
+
 <template>
     <div class="w-72 h-[500px] perspective-1000 cursor-pointer" @click="handleClick">
       <div class="relative w-full h-full transition-transform duration-700 transform-style-preserve-3d" :class="{ 'rotate-y-180': cardState === 'flipped' }">
@@ -25,7 +26,7 @@
 </template>
   
 <script setup lang="ts">
-  import { defineProps, defineEmits, computed } from 'vue'
+  import { computed } from 'vue'
   
   const props = defineProps<{
     fundo?: string
