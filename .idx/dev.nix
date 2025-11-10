@@ -5,14 +5,14 @@
   channel = "stable-24.05"; # or "unstable"
   # Use https://search.nixos.org/packages to find packages
   packages = [
-    pkgs.nodejs_20
+    pkgs.nodejs_22
   ];
   # Sets environment variables in the workspace
   env = {};
   idx = {
     # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
     extensions = [
-      "vue.volar"
+      "vue.volar",
       "google.gemini-cli-vscode-ide-companion"
     ];
     workspace = {
