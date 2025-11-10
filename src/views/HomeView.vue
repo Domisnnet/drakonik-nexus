@@ -1,78 +1,91 @@
 <template>
-  <div class="relative w-full h-screen overflow-hidden bg-black">
-    <!-- Fundo com reflexos e partículas -->
-    <div class="absolute inset-0 bg-[url('/images/reflexo-bg.png')] bg-cover bg-center opacity-70 animate-reflexo"></div>
-    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-black/60 to-black"></div>
-
-    <!-- Efeito de partículas (leve) -->
-    <div class="absolute inset-0 pointer-events-none">
-      <div v-for="n in 25" :key="n" class="particle"></div>
+  <div class="relative flex flex-col items-center justify-center h-screen overflow-hidden bg-gradient-to-b from-[#0d001a] to-black text-white">
+    <!-- Fundo animado -->
+    <div class="absolute inset-0 overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-b from-purple-900/20 to-black animate-pulse"></div>
+      <div class="absolute w-[200%] h-[200%] bg-[radial-gradient(ellipse_at_center,rgba(128,0,255,0.15)_0%,transparent_70%)] animate-spin-slow"></div>
     </div>
 
-    <!-- Personagem central -->
+    <!-- Personagem emergindo das sombras -->
     <img
       src="/images/tela-inicial.jpg"
-      alt="Personagem"
-      class="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 max-w-[400px] opacity-0 animate-personagem"
+      alt="Personagem Drakonik Nexus!"
+      class="absolute bottom-0 object-contain w-full max-w-5xl opacity-0 animate-characterFade"
     />
 
     <!-- Título -->
-    <h1
-      class="absolute bottom-10 left-1/2 -translate-x-1/2 text-4xl md:text-6xl font-bold text-purple-400 drop-shadow-[0_0_15px_rgba(155,100,255,0.8)] opacity-0 animate-titulo"
-    >
-      Drakonik Nexus!
+    <h1 class="text-6xl md:text-7xl font-bold tracking-widest z-10 animate-titlePulse drop-shadow-[0_0_20px_rgba(128,0,255,0.6)]">
+      DRAKONIK NEXUS!
     </h1>
+
+    <!-- Menu -->
+    <div class="flex flex-col items-center gap-4 mt-10 z-10 animate-menuFade">
+      <button class="menu-btn">Iniciar</button>
+      <button class="menu-btn">Cartas</button>
+      <button class="menu-btn">Configurações</button>
+      <button class="menu-btn">Sobre</button>
+    </div>
   </div>
 </template>
 
+<script setup lang="ts">
+// Nenhuma lógica JS por enquanto — apenas visual
+</script>
+
 <style scoped>
-@keyframes reflexo {
-  0%, 100% { background-position: center; }
-  50% { background-position: 60% 40%; }
+/* Fundo girando lentamente */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
-.animate-reflexo {
-  animation: reflexo 12s ease-in-out infinite alternate;
-}
-
-@keyframes personagem {
-  0% { opacity: 0; transform: translate(-50%, 30px); }
-  100% { opacity: 1; transform: translate(-50%, 0); }
-}
-.animate-personagem {
-  animation: personagem 2.5s ease-out forwards;
-  animation-delay: 0.5s;
+.animate-spin-slow {
+  animation: spin-slow 60s linear infinite;
 }
 
-@keyframes titulo {
-  0% { opacity: 0; transform: translate(-50%, 40px); }
-  100% { opacity: 1; transform: translate(-50%, 0); }
-}
-.animate-titulo {
-  animation: titulo 3s ease-out forwards;
-  animation-delay: 1.2s;
-}
-
-/* Partículas flutuando */
-.particle {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 50%;
-  animation: float 8s linear infinite;
-}
-@keyframes float {
-  from {
-    transform: translateY(100vh) scale(0);
+/* Personagem surgindo das sombras */
+@keyframes characterFade {
+  0% {
     opacity: 0;
+    transform: scale(1.05);
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 0.8;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+.animate-characterFade {
+  animation: characterFade 2.5s ease-out 1s forwards;
+}
+
+/* Título com brilho pulsante */
+@keyframes titlePulse {
+  0%, 100% {
+    text-shadow: 0 0 25px rgba(128, 0, 255, 0.7), 0 0 45px rgba(128, 0, 255, 0.4);
   }
   50% {
-    opacity: 0.8;
-    transform: translateY(50vh) scale(1);
+    text-shadow: 0 0 45px rgba(200, 100, 255, 1), 0 0 70px rgba(128, 0, 255, 0.8);
   }
-  to {
-    transform: translateY(-10vh) scale(0);
-    opacity: 0;
-  }
+}
+.animate-titlePulse {
+  animation: titlePulse 3s ease-in-out infinite;
+}
+
+/* Menu aparecendo com atraso */
+@keyframes menuFade {
+  0% { opacity: 0; transform: translateY(40px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.animate-menuFade {
+  animation: menuFade 1.5s ease-out 3s forwards;
+}
+
+/* Botões do menu */
+.menu-btn {
+  @apply px-8 py-3 border-2 border-purple-500/70 text-lg tracking-widest rounded-xl bg-transparent text-white transition-all duration-500;
+}
+.menu-btn:hover {
+  @apply border-purple-400 bg-purple-600/20 shadow-[0_0_20px_rgba(168,85,247,0.5)] scale-105;
 }
 </style>
