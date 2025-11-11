@@ -1,56 +1,61 @@
 <template>
-    <div
-      class="relative w-full h-screen flex flex-col items-center justify-center bg-gradient-to-b from-black via-indigo-950 to-black overflow-hidden"
-    >
-      <!-- Efeito de energia no fundo -->
-      <div class="absolute inset-0 animate-rotateBg opacity-40">
-        <div
-          class="absolute w-[150%] h-[150%] bg-[radial-gradient(circle_at_center,rgba(138,43,226,0.4),transparent_70%)]"
-        ></div>
-      </div>
-  
-      <!-- Fundo dos dragões -->
-      <div v-if="showDragons" class="absolute inset-0 z-0 hidden md:flex">
-        <div
-          class="absolute left-0 top-0 bottom-0 w-1/2 bg-[url('/images/dragon-left.png')] bg-cover bg-center bg-no-repeat transform -scale-x-100"
-        ></div>
-        <div
-          class="absolute right-0 top-0 bottom-0 w-1/2 bg-[url('/images/dragon-right.png')] bg-cover bg-center bg-no-repeat"
-        ></div>
-      </div>
-  
-      <!-- Fundo Mobile -->
-      <div
-        v-if="showDragons"
-        class="absolute inset-0 z-0 md:hidden bg-[url('/images/tela-mobile.jpg')] bg-cover bg-center bg-no-repeat"
-      ></div>
-  
-      <!-- Slot do conteúdo -->
-      <main class="relative z-10 w-full h-full flex items-center justify-center">
-        <slot></slot>
-      </main>
+  <div
+    class="relative w-full h-screen overflow-hidden flex flex-col items-center justify-center bg-gradient-to-b from-black via-indigo-950 to-black"
+  >
+    <!-- Canvas de partículas -->
+    <canvas
+      ref="particlesCanvas"
+      class="absolute inset-0 w-full h-full pointer-events-none z-0"
+    ></canvas>
+
+    <!-- Slot do conteúdo -->
+    <div class="relative z-10 w-full h-full flex flex-col items-center justify-center">
+      <slot />
     </div>
+  </div>
 </template>
-  
+
 <script setup>
-  defineProps({
-    showDragons: {
-      type: Boolean,
-      default: false,
-    },
-  });
+import { ref, onMounted } from "vue";
+
+const particlesCanvas = ref(null);
+
+onMounted(() => {
+  const canvas = particlesCanvas.value;
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+
+  const resizeCanvas = () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  };
+  resizeCanvas();
+  window.addEventListener("resize", resizeCanvas);
+
+  const particles = Array.from({ length: 100 }, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 2 + 1,
+    d: Math.random() * 1.2 + 0.5,
+  }));
+
+  const animate = () => {
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "rgba(160, 80, 255, 0.7)";
+    ctx.beginPath();
+    for (const p of particles) {
+      ctx.moveTo(p.x, p.y);
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2, true);
+      p.y += p.d;
+      if (p.y > canvas.height) {
+        p.y = 0;
+        p.x = Math.random() * canvas.width;
+      }
+    }
+    ctx.fill();
+    requestAnimationFrame(animate);
+  };
+  animate();
+});
 </script>
-  
-<style scoped>
-  @keyframes rotateBg {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-  .animate-rotateBg {
-    animation: rotateBg 40s linear infinite;
-  }
-</style>  
