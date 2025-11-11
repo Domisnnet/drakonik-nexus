@@ -1,10 +1,15 @@
+
 <template>
   <div
     class="home-container"
     :class="{ 'opacity-0': fadingOut }"
   >
-    <!-- Fundo Fixo para Desktop -->
-    <div class="background"></div>
+    <!-- Fundo de Dragões para Desktop -->
+    <div class="desktop-background">
+      <div class="dragon-left"></div>
+      <div class="dragon-right"></div>
+    </div>
+    
     <!-- Fundo para Mobile -->
     <div class="background-mobile"></div>
 
@@ -91,22 +96,43 @@ const startGame = () => {
   box-sizing: border-box; 
   transition: opacity 1s ease;
   position: relative;
+  background-color: #000; 
 }
 
 .opacity-0 {
   opacity: 0;
 }
 
-.background {
+.desktop-background {
+  display: block;
   position: absolute;
   inset: 0;
-  background-image: url("/images/tela-inicial.png");
-  background-size: contain; 
-  background-position: center; 
-  background-repeat: no-repeat;
-  transform-origin: center;
   z-index: 0;
-  transition: transform 3s ease-out;
+}
+
+.dragon-left {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background-image: url('/images/dragon-left.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  left: 0;
+  background-position: center;
+  transform: scaleX(-1); 
+}
+
+.dragon-right {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background-image: url('/images/dragon-right.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  right: 0;
+  background-position: center;
 }
 
 .background-mobile {
@@ -173,7 +199,7 @@ const startGame = () => {
 
 /* Media Query para Responsividade */
 @media (max-width: 768px) {
-  .background {
+  .desktop-background {
     display: none; 
   }
 
