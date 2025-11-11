@@ -81,7 +81,8 @@ const startGame = () => {
 
 <style scoped>
 .home-container {
-  height: 100%; 
+  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -89,21 +90,24 @@ const startGame = () => {
   padding-bottom: 8vh;
   box-sizing: border-box; 
   transition: opacity 1s ease;
-  position: relative; 
+  position: relative;
+}
+
+.opacity-0 {
+  opacity: 0;
 }
 
 .background {
   position: absolute;
   inset: 0;
   background-image: url("/images/tela3.png");
-  background-size: cover; 
+  background-size: contain; 
   background-position: center; 
   background-repeat: no-repeat;
   filter: brightness(0.75);
   transform-origin: center;
   z-index: 0;
   transition: transform 3s ease-out;
-  max-width: 100%;
 }
 
 .background-mobile {
@@ -115,7 +119,6 @@ const startGame = () => {
   background-position: center;
   background-repeat: no-repeat;
   z-index: 0;
-  max-width: 100%;
 }
 
 .background::after {
@@ -133,7 +136,6 @@ const startGame = () => {
   height: 100%;
   pointer-events: none;
   z-index: 1;
-  max-width: 100%;
 }
 
 .content {
@@ -146,7 +148,7 @@ const startGame = () => {
   font-size: 3rem;
   font-weight: 800;
   color: black;
-  text-shadow: 0 0 15px rgba(128, 0, 255, 0.8);
+  text-shadow: 0 0 20px rgba(128, 0, 255, 0.8);
   margin-bottom: 2rem;
   animation: fade-in 1.5s ease-out forwards;
 }
@@ -181,15 +183,15 @@ const startGame = () => {
 /* Media Query para Responsividade */
 @media (max-width: 768px) {
   .background {
-    display: none; /* Esconde o fundo de desktop */
+    display: none; 
   }
 
   .background-mobile {
-    display: block; /* Mostra o fundo para mobile */
+    display: block; 
   }
 
   .title {
-    color: white; /* Garante legibilidade no novo fundo */
+    color: black;
     font-size: 2.5rem;
   }
 

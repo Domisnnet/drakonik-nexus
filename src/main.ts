@@ -2,8 +2,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
-import './style.css'
-import './assets/global.css' // Importa os estilos globais
+import './style.css' // Importa a folha de estilo global unificada
 
 const app = createApp(App)
 
