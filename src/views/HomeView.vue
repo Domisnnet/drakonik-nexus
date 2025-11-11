@@ -1,7 +1,7 @@
 <template>
   <BaseLayout>
     <div
-      class="relative flex flex-col items-center justify-end h-full w-full pb-[8vh] text-center overflow-hidden"
+      class="relative flex flex-col items-center justify-end h-full w-full pb-[8vh] text-center"
     >
       <!-- Fundo de Dragões (apenas Home) -->
       <div class="absolute inset-0 z-0 hidden md:flex">
