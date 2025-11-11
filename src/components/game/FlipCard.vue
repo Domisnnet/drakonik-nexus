@@ -12,11 +12,12 @@
       <div
         class="absolute w-full h-full backface-hidden rounded-2xl overflow-hidden shadow-xl"
       >
-        <img
-          :src="contentUrl"
-          :alt="alt"
-          class="w-full h-full object-cover rounded-2xl"
-        />
+      <img 
+        :src="contentUrl" 
+        :alt="alt" 
+        class="card-image object-contain max-h-[280px] mx-auto"
+      />
+
       </div>
 
       <!-- Verso da carta -->
