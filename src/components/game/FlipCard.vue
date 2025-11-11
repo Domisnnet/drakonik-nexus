@@ -1,70 +1,63 @@
 <template>
   <div
-    class="relative w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-black via-indigo-950 to-black overflow-hidden"
+    class="relative w-56 h-80 cursor-pointer [perspective:1000px]"
+    @click="$emit('click-event')"
   >
-    <!-- Cabeçalho -->
-    <header
-      class="z-10 text-center mb-6 drop-shadow-[0_0_10px_rgba(147,51,234,0.8)]"
+    <!-- Conteúdo giratório -->
+    <div
+      class="relative w-full h-full transition-transform duration-700"
+      :class="{ '[transform:rotateY(180deg)]': cardState === 'flipped' }"
     >
-      <h1
-        class="text-4xl md:text-6xl font-extrabold bg-gradient-to-r from-purple-400 via-blue-500 to-purple-700 bg-clip-text text-transparent">
-        Drakonik Nexus!
-      </h1>
-    </header>
+      <!-- Frente da carta -->
+      <div
+        class="absolute w-full h-full backface-hidden rounded-2xl overflow-hidden shadow-xl"
+      >
+        <img
+          :src="contentUrl"
+          :alt="alt"
+          class="w-full h-full object-cover rounded-2xl"
+        />
+      </div>
 
-    <!-- Tabuleiro -->
-    <main
-      class="z-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 p-6 max-w-6xl"
-    >
-      <FlipCard
-        v-for="card in gameStore.cards"
-        :key="card.id"
-        :fundo="card.fundo"
-        :card-state="card.cardState"
-        :content-url="card.contentUrl"
-        :alt="card.alt"
-        :nivel="card.nivel"
-        :descricao="card.descricao"
-        :atk="card.atk"
-        :def="card.def"
-        @click-event="gameStore.handleCardClick(card.id)"
-        class="transition-transform duration-500 hover:scale-105 hover:drop-shadow-[0_0_15px_rgba(59,130,246,0.6)]"
-      />
-    </main>
+      <!-- Verso da carta -->
+      <div
+        class="absolute w-full h-full [transform:rotateY(180deg)] backface-hidden rounded-2xl overflow-hidden shadow-xl"
+      >
+        <img
+          :src="fundo"
+          alt="Verso"
+          class="absolute w-full h-full object-cover rounded-2xl"
+        />
+        <div
+          class="absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-black/90 via-black/50 to-transparent text-white"
+        >
+          <h2 class="text-lg font-bold mb-1">{{ alt }}</h2>
+          <p class="text-xs opacity-80 mb-2">{{ descricao }}</p>
+          <div class="flex justify-between text-sm">
+            <span>⚔️ ATK: {{ atk }}</span>
+            <span>🛡️ DEF: {{ def }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
-import { useGameStore } from "@/stores/game";
-
-const gameStore = useGameStore();
-
-onMounted(() => {
-  if (gameStore.cards.length === 0) {
-    gameStore.initializeGame();
-  }
+defineProps({
+  fundo: String,
+  contentUrl: String,
+  alt: String,
+  cardState: String,
+  descricao: String,
+  atk: Number,
+  def: Number,
 });
+defineEmits(["click-event"]);
 </script>
 
 <style scoped>
-@keyframes rotateBg {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-.animate-rotateBg {
-  animation: rotateBg 30s linear infinite;
-}
-
-@keyframes pulseParticle {
-  0%, 100% { opacity: 0.2; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(1.6); }
-}
-.animate-pulseParticle {
-  animation: pulseParticle 3s ease-in-out infinite;
+.backface-hidden {
+  backface-visibility: hidden;
 }
 </style>

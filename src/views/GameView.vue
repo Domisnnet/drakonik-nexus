@@ -1,155 +1,148 @@
 <template>
-  <div class="game-container">
-    <div class="background-overlay" />
+  <div
+    class="relative w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-black via-indigo-950 to-black overflow-hidden"
+  >
+    <!-- Efeito giratório do fundo -->
+    <div class="absolute inset-0 animate-rotateBg opacity-40">
+      <div
+        class="absolute w-[150%] h-[150%] bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.3),transparent_70%)]"
+      ></div>
+    </div>
 
-    <!-- canvas de partículas -->
-    <canvas ref="particlesCanvas" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
+    <!-- Cabeçalho -->
+    <header
+      class="z-10 text-center mb-8 drop-shadow-[0_0_10px_rgba(147,51,234,0.8)]"
+    >
+      <h1
+        class="text-4xl md:text-6xl font-extrabold bg-gradient-to-r from-purple-400 via-blue-500 to-purple-700 bg-clip-text text-transparent"
+      >
+        Drakonik Nexus!
+      </h1>
+      <p class="text-sm uppercase tracking-widest text-indigo-300 mt-2">
+        Duel Arena
+      </p>
+    </header>
 
-    <div class="content">
-      <h1 class="title">Drakonik Nexus</h1>
+    <!-- Slider de cartas -->
+    <div class="z-10 relative flex items-center justify-center w-full px-6">
+      <!-- Botão esquerda -->
+      <button
+        class="absolute left-6 md:left-12 text-indigo-400 hover:text-white transition-transform hover:scale-125 text-4xl"
+        @click="prevCard"
+      >
+        ‹
+      </button>
 
-      <div class="card-area">
-        <!-- mostra um placeholder enquanto não houver card -->
-        <div v-if="!mainCard" class="card-placeholder">Carregando carta...</div>
+      <!-- Card principal -->
+      <FlipCard
+        v-if="currentCard"
+        :fundo="currentCard.fundo"
+        :content-url="currentCard.contentUrl"
+        :alt="currentCard.alt"
+        :descricao="currentCard.descricao"
+        :atk="currentCard.atk"
+        :def="currentCard.def"
+        :card-state="currentCard.cardState"
+        @click-event="gameStore.handleCardClick(currentCard.id)"
+        class="transition-transform duration-500 hover:scale-105 hover:drop-shadow-[0_0_15px_rgba(59,130,246,0.6)]"
+      />
 
-        <FlipCard
-          v-else
-          :fundo="mainCard.fundo"
-          :card-state="mainCard.cardState"
-          :content-url="mainCard.contentUrl"
-          :alt="mainCard.alt"
-          :nivel="mainCard.nivel"
-          :descricao="mainCard.descricao"
-          :atk="mainCard.atk"
-          :def="mainCard.def"
-          @click-event="flipMainCard"
-        />
-      </div>
+      <!-- Botão direita -->
+      <button
+        class="absolute right-6 md:right-12 text-indigo-400 hover:text-white transition-transform hover:scale-125 text-4xl"
+        @click="nextCard"
+      >
+        ›
+      </button>
+    </div>
 
-      <router-link to="/" class="return-btn">Voltar à Tela Inicial</router-link>
+    <!-- Rodapé -->
+    <footer class="z-10 mt-8 flex flex-col items-center">
+      <button
+        class="px-8 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-semibold rounded-full shadow-lg hover:from-indigo-500 hover:to-purple-600 transition-all"
+        @click="gameStore.resetGame"
+      >
+        Reiniciar Jogo
+      </button>
+      <p class="text-xs text-indigo-400 mt-2 tracking-widest uppercase">
+        {{ currentIndex + 1 }} / {{ gameStore.cards.length }}
+      </p>
+    </footer>
+
+    <!-- Partículas -->
+    <div class="absolute inset-0 pointer-events-none">
+      <div
+        v-for="i in 25"
+        :key="i"
+        class="absolute bg-blue-400/30 rounded-full animate-pulseParticle"
+        :style="{
+          top: `${Math.random() * 100}%`,
+          left: `${Math.random() * 100}%`,
+          width: `${Math.random() * 4 + 2}px`,
+          height: `${Math.random() * 4 + 2}px`,
+          animationDelay: `${Math.random() * 4}s`,
+        }"
+      ></div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, computed } from "vue";
-import { useRouter } from "vue-router";
+import { ref, computed, onMounted } from "vue";
 import { useGameStore } from "@/stores/game";
-import FlipCard from "@/components/game/FlipCard.vue";
+import FlipCard from "@/components/FlipCard.vue";
 
-const router = useRouter();
 const gameStore = useGameStore();
+const currentIndex = ref(0);
 
-const particlesCanvas = ref<HTMLCanvasElement | null>(null);
-
-const mainCard = computed(() => {
-  return (gameStore && Array.isArray(gameStore.cards) && gameStore.cards.length > 0)
-    ? gameStore.cards[0]
-    : null;
+onMounted(() => {
+  if (gameStore.cards.length === 0) {
+    gameStore.initializeGame();
+  }
 });
 
-let raf = 0;
+const currentCard = computed(() => gameStore.cards[currentIndex.value]);
 
-onMounted(async () => {
-  try {
-    if (!gameStore.cards || gameStore.cards.length === 0) {
-      if (typeof gameStore.initializeGame === "function") {
-        const res = gameStore.initializeGame();
-        if (res && typeof res.then === "function") await res;
-      }
-    }
-  } catch (err) {
-    console.error("Erro ao inicializar gameStore:", err);
+function nextCard() {
+  if (gameStore.cards.length > 0) {
+    currentIndex.value = (currentIndex.value + 1) % gameStore.cards.length;
   }
+}
 
-  const canvas = particlesCanvas.value;
-  if (!canvas) {
-    console.warn("Canvas não encontrado (particlesCanvas está null)");
-    return;
+function prevCard() {
+  if (gameStore.cards.length > 0) {
+    currentIndex.value =
+      (currentIndex.value - 1 + gameStore.cards.length) %
+      gameStore.cards.length;
   }
-  const ctx = canvas.getContext("2d");
-  if (!ctx) {
-    console.warn("2D context não disponível no canvas");
-    return;
-  }
-
-  const resize = () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  };
-  resize();
-  window.addEventListener("resize", resize);
-
-  const particles = Array.from({ length: 80 }, () => ({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    r: Math.random() * 2 + 0.8,
-    dx: (Math.random() - 0.5) * 0.6,
-    dy: (Math.random() - 0.5) * 0.6,
-  }));
-
-  const draw = () => {
-    if (!ctx) return;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "rgba(155,80,255,0.8)";
-    for (const p of particles) {
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fill();
-      p.x += p.dx;
-      p.y += p.dy;
-      if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
-      if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
-    }
-    raf = requestAnimationFrame(draw);
-  };
-  draw();
-
-  onBeforeUnmount(() => {
-    cancelAnimationFrame(raf);
-    window.removeEventListener("resize", resize);
-  });
-});
-
-function flipMainCard() {
-  if (!mainCard.value) return;
-  if (!("cardState" in mainCard.value)) {
-    mainCard.value.cardState = "flipped";
-    return;
-  }
-  mainCard.value.cardState = mainCard.value.cardState === "flipped" ? "default" : "flipped";
 }
 </script>
 
 <style scoped>
-.game-container {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: radial-gradient(circle at center, #0d001a, #000);
+@keyframes rotateBg {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
-.background-overlay {
-  position: absolute;
-  inset: 0;
-  background-image: url("/images/fundo-carta.jpg");
-  background-size: cover;
-  background-position: center;
-  opacity: 0.18;
-  filter: blur(6px);
+.animate-rotateBg {
+  animation: rotateBg 30s linear infinite;
 }
-.content {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+
+@keyframes pulseParticle {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.6);
+  }
 }
-.title { color: #c084fc; text-shadow: 0 0 25px rgba(180,70,255,0.9); margin-bottom: 1rem; }
-.card-area { width: 320px; height: 520px; display:flex; align-items:center; justify-content:center; }
-.card-placeholder { color: #aaa; padding: 2rem; border: 1px dashed rgba(200,200,200,0.06); border-radius: 8px; }
-.return-btn { margin-top: 1.5rem; color: #c084fc; }
+.animate-pulseParticle {
+  animation: pulseParticle 3s ease-in-out infinite;
+}
 </style>
