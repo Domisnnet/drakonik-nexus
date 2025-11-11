@@ -1,7 +1,5 @@
 <template>
   <div class="game-container">
-    <h1>Game View</h1>
-    <p>O jogo começa aqui!</p>
     <router-link to="/">Voltar para a Home</router-link>
   </div>
 </template>
