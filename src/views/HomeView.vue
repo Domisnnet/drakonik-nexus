@@ -104,7 +104,6 @@ const startGame = () => {
   background-size: contain; 
   background-position: center; 
   background-repeat: no-repeat;
-  filter: brightness(0.75);
   transform-origin: center;
   z-index: 0;
   transition: transform 3s ease-out;
@@ -119,15 +118,6 @@ const startGame = () => {
   background-position: center;
   background-repeat: no-repeat;
   z-index: 0;
-  filter: brightness(0.75);
-}
-
-.background::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.8));
-  z-index: 1;
 }
 
 .particles {
