@@ -1,170 +1,33 @@
-
 <template>
-  <div
-    class="home-container"
-    :class="{ 'opacity-0': fadingOut }"
-  >
-    <!-- Fundo de Dragões para Desktop -->
-    <div class="desktop-background">
-      <div class="dragon-left"></div>
-      <div class="dragon-right"></div>
-    </div>
-    
-    <!-- Fundo para Mobile -->
-    <div class="background-mobile"></div>
-
-    <!-- Partículas -->
-    <canvas ref="particlesCanvas" class="particles"></canvas>
-
-    <!-- Conteúdo -->
-    <div class="content">
-      <h1 class="title">Drakonik Nexus!</h1>
-      <button @click="startGame" class="start-button">Iniciar</button>
-    </div>
-  </div>
+  <BaseLayout>
+    <h1 class="title">Drakonik Nexus!</h1>
+    <button @click="startGame" class="start-button">Iniciar</button>
+  </BaseLayout>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
+import BaseLayout from "@/layouts/BaseLayout.vue";
 
 const router = useRouter();
-const particlesCanvas = ref(null);
 const fadingOut = ref(false);
 let iniciarSom;
 
-onMounted(() => {
+const startGame = () => {
   iniciarSom = new Audio("/sounds/intro-sound.mp3");
   iniciarSom.volume = 0.6;
-
-  const canvas = particlesCanvas.value;
-  if (!canvas) return;
-  const ctx = canvas.getContext("2d");
-
-  const resizeCanvas = () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  };
-
-  resizeCanvas();
-  window.addEventListener("resize", resizeCanvas);
-
-  const particles = Array.from({ length: 100 }, () => ({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    r: Math.random() * 2 + 1,
-    d: Math.random() * 1.2 + 0.5,
-  }));
-
-  const animate = () => {
-    if (!ctx) return;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "rgba(160, 80, 255, 0.7)";
-    ctx.beginPath();
-    for (const p of particles) {
-      ctx.moveTo(p.x, p.y);
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2, true);
-      p.y += p.d;
-      if (p.y > canvas.height) {
-        p.y = 0;
-        p.x = Math.random() * canvas.width;
-      }
-    }
-    ctx.fill();
-    requestAnimationFrame(animate);
-  };
-
-  animate();
-});
-
-const startGame = () => {
-  if (iniciarSom) iniciarSom.play();
+  iniciarSom.play();
   fadingOut.value = true;
   setTimeout(() => router.push("/game"), 1500);
 };
 </script>
 
 <style scoped>
-.home-container {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end; 
-  padding-bottom: 8vh;
-  box-sizing: border-box; 
-  transition: opacity 1s ease;
-  position: relative;
-  background-color: #000; 
-}
-
-.opacity-0 {
-  opacity: 0;
-}
-
-.desktop-background {
-  display: block;
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-}
-
-.dragon-left {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 50%;
-  background-image: url('/images/dragon-left.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  left: 0;
-  background-position: center;
-  transform: scaleX(-1);
-}
-
-.dragon-right {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 50%;
-  background-image: url('/images/dragon-right.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  right: 0;
-  background-position: center;
-}
-
-.background-mobile {
-  display: none; 
-  position: absolute;
-  inset: 0;
-  background-image: url('/images/tela-mobile.jpg');
-  background-size: cover; 
-  background-position: center;
-  background-repeat: no-repeat;
-  z-index: 0;
-}
-
-.particles {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.content {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-}
-
 .title {
   font-size: 3rem;
   font-weight: 800;
-  color: black; 
+  color: black;
   text-shadow: 0 0 20px rgba(128, 0, 255, 0.8);
   margin-bottom: 2rem;
   animation: fade-in 1.5s ease-out forwards;
@@ -194,39 +57,6 @@ const startGame = () => {
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-/* Media Query para Tablet */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .dragon-left {
-    display: none; /* Esconde o dragão esquerdo */
-  }
-  .dragon-right {
-    width: 100%; /* Ocupa a tela inteira */
-    background-image: url('/images/dragon-right.png');
-    background-position: center;
-    transform: none; /* Garante que não haja espelhamento */
-  }
-}
-
-/* Media Query para Mobile */
-@media (max-width: 768px) {
-  .desktop-background {
-    display: none; 
-  }
-
-  .background-mobile {
-    display: block; 
-  }
-
-  .title {
-    color: black; 
-    font-size: 2.5rem;
-  }
-
-  .home-container {
-    padding-bottom: 12vh; 
   }
 }
 </style>
