@@ -1,9 +1,10 @@
 <template>
   <BaseLayout>
-    <div class="relative flex flex-col items-center justify-end h-full w-full pb-[8vh] text-center overflow-hidden">
-      
-      <!-- Fundo de Dragões exclusivo -->
-      <div class="absolute inset-0 z-0 hidden md:flex">
+    <div
+      class="relative flex flex-col items-center justify-end h-full w-full pb-[8vh] text-center overflow-hidden"
+    >
+      <!-- Fundo de Dragões (apenas Home) -->
+      <div class="absolute inset-0 z-10 hidden md:flex">
         <div
           class="absolute left-0 top-0 bottom-0 w-1/2 bg-[url('/images/dragon-left.png')] bg-cover bg-center bg-no-repeat transform -scale-x-100 opacity-90"
         ></div>
@@ -14,11 +15,11 @@
 
       <!-- Fundo Mobile -->
       <div
-        class="absolute inset-0 z-0 md:hidden bg-[url('/images/tela-mobile.jpg')] bg-cover bg-center bg-no-repeat"
+        class="absolute inset-0 z-10 md:hidden bg-[url('/images/tela-mobile.jpg')] bg-cover bg-center bg-no-repeat"
       ></div>
 
       <!-- Conteúdo -->
-      <div class="relative z-20 animate-fade-in flex flex-col items-center">
+      <div class="relative z-30 animate-fade-in flex flex-col items-center">
         <h1
           class="text-5xl md:text-6xl font-extrabold text-black drop-shadow-[0_0_20px_rgba(128,0,255,0.8)] mb-8"
         >
@@ -48,3 +49,19 @@ const startGame = () => {
   setTimeout(() => router.push("/game"), 1500);
 };
 </script>
+
+<style scoped>
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in {
+  animation: fade-in 1.5s ease-out forwards;
+}
+</style>
