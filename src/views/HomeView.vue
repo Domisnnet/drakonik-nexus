@@ -151,7 +151,7 @@ const startGame = () => {
   color: white;
   border: 2px solid #a855f7;
   border-radius: 0.75rem;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.885);
   cursor: pointer;
   transition: all 0.3s;
   box-shadow: 0 0 10px rgba(128, 0, 255, 0.6);
