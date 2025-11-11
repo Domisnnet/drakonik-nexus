@@ -1,96 +1,69 @@
 <template>
-  <div
-    class="relative flex flex-col items-center justify-center min-h-screen w-full bg-gradient-to-b from-black via-indigo-950 to-black text-white overflow-hidden"
-  >
-    <!-- Container das setas e do card -->
-    <div
-      class="flex items-center justify-center w-full max-w-5xl gap-10 px-4 sm:px-6 md:px-12 lg:gap-20"
+  <div class="flex items-center justify-center gap-20 h-full">
+    <!-- Botão Voltar -->
+    <button
+      class="w-[70px] h-[70px] flex items-center justify-center rounded-full bg-cyan-500/20 hover:bg-cyan-400/70 transition-all duration-300 shadow-[0_4px_15px_rgba(0,0,0,0.2),inset_0_0_0_3px_rgba(255,255,255,0.8)] backdrop-blur-md"
+      @click="previousCard"
     >
-      <!-- Botão Voltar -->
-      <button
-        @click="previousCard"
-        class="bg-cyan-400/20 hover:bg-cyan-400/70 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center rounded-full border-none cursor-pointer shadow-lg shadow-cyan-400/20 backdrop-blur-sm transition-all duration-300"
-      >
-        <img
-          src="/images/seta.png"
-          alt="seta voltar"
-          class="w-8 h-8 invert rotate-180"
-        />
-      </button>
-
-      <!-- Card Atual -->
-      <FlipCard
-        v-if="currentCard && currentCard.contentUrl"
-        :card-id="currentCard.cardId"
-        :fundo="currentCard.fundo"
-        :is-matched="currentCard.isMatched"
-        :card-state="currentCard.cardState"
-        :content-url="currentCard.contentUrl"
-        :alt="currentCard.alt"
-        :nivel="currentCard.nivel"
-        :descricao="currentCard.descricao"
-        :atk="currentCard.atk"
-        :def="currentCard.def"
-        @click-event="handleFlip"
-        class="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg"
+      <img
+        src="/images/seta.png"
+        alt="seta voltar"
+        class="w-10 h-10 invert rotate-180 transition-transform duration-300"
       />
+    </button>
 
-      <!-- Botão Avançar -->
-      <button
-        @click="nextCard"
-        class="bg-cyan-400/20 hover:bg-cyan-400/70 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center rounded-full border-none cursor-pointer shadow-lg shadow-cyan-400/20 backdrop-blur-sm transition-all duration-300"
-      >
-        <img
-          src="/images/seta.png"
-          alt="seta avançar"
-          class="w-8 h-8 invert"
-        />
-      </button>
-    </div>
+    <!-- Card Atual -->
+    <FlipCard
+      v-if="currentCard"
+      :card-id="currentCard.cardId"
+      :fundo="currentCard.fundo"
+      :is-matched="currentCard.isMatched"
+      :card-state="currentCard.cardState"
+      :content-url="currentCard.contentUrl"
+      :alt="currentCard.alt"
+      :nivel="currentCard.nivel"
+      :descricao="currentCard.descricao"
+      :atk="currentCard.atk"
+      :def="currentCard.def"
+      @click-event="handleFlip"
+    />
 
-    <!-- Setas no mobile -->
-    <div
-      class="flex md:hidden justify-center gap-8 mt-6"
+    <!-- Botão Avançar -->
+    <button
+      class="w-[70px] h-[70px] flex items-center justify-center rounded-full bg-cyan-500/20 hover:bg-cyan-400/70 transition-all duration-300 shadow-[0_4px_15px_rgba(0,0,0,0.2),inset_0_0_0_3px_rgba(255,255,255,0.8)] backdrop-blur-md"
+      @click="nextCard"
     >
-      <button
-        @click="previousCard"
-        class="bg-cyan-400/20 hover:bg-cyan-400/70 w-12 h-12 flex items-center justify-center rounded-full border-none cursor-pointer shadow-md shadow-cyan-400/20 backdrop-blur-sm transition-all duration-300"
-      >
-        <img src="/images/seta.png" alt="seta voltar" class="w-6 h-6 invert rotate-180" />
-      </button>
-
-      <button
-        @click="nextCard"
-        class="bg-cyan-400/20 hover:bg-cyan-400/70 w-12 h-12 flex items-center justify-center rounded-full border-none cursor-pointer shadow-md shadow-cyan-400/20 backdrop-blur-sm transition-all duration-300"
-      >
-        <img src="/images/seta.png" alt="seta avançar" class="w-6 h-6 invert" />
-      </button>
-    </div>
+      <img
+        src="/images/seta.png"
+        alt="seta avançar"
+        class="w-10 h-10 invert transition-transform duration-300"
+      />
+    </button>
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue'
-import FlipCard from '@/components/game/FlipCard.vue'
-import { useGameStore } from '@/stores/game'
+import { computed, onMounted } from "vue";
+import FlipCard from "@/components/game/FlipCard.vue";
+import { useGameStore } from "@/stores/game";
 
-const gameStore = useGameStore()
+const gameStore = useGameStore();
 
 onMounted(() => {
-  gameStore.initializeGame()
-})
+  gameStore.initializeGame();
+});
 
-const currentCard = computed(() => gameStore.currentCard)
+const currentCard = computed(() => gameStore.currentCard);
 
 function handleFlip() {
-  if (currentCard.value) gameStore.flipCard(currentCard.value.cardId)
+  gameStore.flipCard(currentCard.value.cardId);
 }
 
 function nextCard() {
-  gameStore.nextCard()
+  gameStore.nextCard();
 }
 
 function previousCard() {
-  gameStore.previousCard()
+  gameStore.previousCard();
 }
 </script>
