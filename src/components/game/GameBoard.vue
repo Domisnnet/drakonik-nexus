@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="gameStore.cards.length"
-    class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 md:gap-4 p-4 w-full max-w-6xl mx-auto"
+    class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4 p-4 w-full max-w-7xl mx-auto"
   >
     <FlipCard
       v-for="card in gameStore.cards"
@@ -33,7 +33,7 @@ import FlipCard from './FlipCard.vue';
 const gameStore = useGameStore();
 
 onMounted(() => {
-  // Inicializa o jogo apenas se o tabuleiro estiver vazio
+  // Initialize the game only if the board is empty
   if (gameStore.cards.length === 0) {
     gameStore.initializeGame();
   }

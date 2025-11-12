@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative w-full aspect-[5/7] cursor-pointer [perspective:1000px]"
+    class="relative w-full aspect-[5/8] cursor-pointer [perspective:1000px]"
     :class="{ 'pointer-events-none': isMatched }"
     @click="handleClick"
   >
@@ -9,47 +9,48 @@
       class="relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d]"
       :class="{ '[transform:rotateY(180deg)]': isFlipped || isMatched }"
     >
+      <!-- Back of the card -->
       <div class="absolute w-full h-full [backface-visibility:hidden]">
         <img
-          src="/images/frente-carta.jpg"
+          src="/images/fundo-carta.jpg"
           alt="Verso da Carta"
-          class="w-full h-full object-cover rounded-lg md:rounded-xl shadow-lg shadow-cyan-500/30"
+          class="w-full h-full object-cover rounded-lg md:rounded-xl shadow-lg hover:shadow-cyan-500/50 transition-shadow duration-300"
         />
       </div>
 
+      <!-- Front of the card: Final, stable Flexbox architecture -->
       <div
-        class="absolute w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-lg md:rounded-xl overflow-hidden shadow-2xl border-2 border-slate-700"
+        class="absolute w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-lg md:rounded-xl overflow-hidden shadow-2xl border-2 border-slate-700 flex flex-col"
         :class="`bg-[url('/images/${fundo}.jpg')] bg-cover`"
       >
-        <div class="p-1.5 md:p-2 bg-gradient-to-b from-black/80 via-black/40 to-transparent text-white">
-          <div class="flex justify-between items-center">
-            <h2 class="text-[0.6rem] sm:text-xs md:text-sm font-bold drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] pr-2">
-              {{ nome }}
-            </h2>
+        <!-- 1. Header -->
+        <div class="p-2 bg-gradient-to-b from-black/80 to-transparent text-white flex-shrink-0">
+          <div class="flex justify-between items-start">
+            <h2 class="text-sm font-bold leading-tight pr-2">{{ nome }}</h2>
             <div class="flex items-center gap-1 text-yellow-400 flex-shrink-0">
-              <span class="text-[0.55rem] sm:text-xs font-bold">LV</span>
-              <span class="flex items-center justify-center w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-yellow-400 text-black text-[0.55rem] sm:text-xs font-bold">
-                {{ nivel }}
-              </span>
+              <span class="text-xs font-bold">LV</span>
+              <span class="flex items-center justify-center w-5 h-5 rounded-full bg-yellow-400 text-black text-xs font-bold">{{ nivel }}</span>
             </div>
           </div>
         </div>
 
-        <div class="w-full h-[45%] my-0.5 md:my-1 border-y-2 md:border-y-4 border-slate-600 bg-black/30">
-          <img
-            :src="characterImageUrl"
-            :alt="alt"
-            class="w-full h-full object-cover"
-          />
+        <!-- 2. Image: Increased height to better fit character art -->
+        <div class="h-48 w-full border-y-2 border-slate-600 bg-black/30">
+          <img :src="characterImageUrl" :alt="alt" class="w-full h-full object-cover" />
         </div>
 
-        <div class="p-1.5 md:p-2 bg-gradient-to-t from-black/80 via-black/60 to-transparent text-white text-[0.6rem] md:text-xs">
-           <p class="text-[0.55rem] sm:text-[0.6rem] md:text-xs italic border-t border-slate-400 pt-1 mb-1 md:pt-2 md:mb-2 font-serif leading-tight">
-            {{ descricao }}
-          </p>
-          <div class="text-right font-semibold scale-90 sm:scale-100 origin-right">
+        <!-- 3. Body: Reliably takes remaining space -->
+        <div class="p-2 text-white bg-gradient-to-t from-black/80 to-transparent flex-1 flex flex-col min-h-0">
+          <!-- Description container that scrolls -->
+          <div class="flex-1 overflow-y-auto scrollbar-thin border-t border-slate-400/50 pt-2">
+            <p class="text-xs sm:text-sm italic font-serif leading-snug">
+              {{ descricao }}
+            </p>
+          </div>
+          <!-- Stats are fixed at the bottom -->
+          <div class="text-right text-sm font-semibold mt-2 flex-shrink-0">
             <span>⚔️ ATK / {{ atk }}</span>
-            <span class="ml-2 md:ml-3">🛡️ DEF / {{ def }}</span>
+            <span class="ml-3">🛡️ DEF / {{ def }}</span>
           </div>
         </div>
       </div>
@@ -61,30 +62,47 @@
 import { computed } from 'vue';
 
 const props = defineProps({
-  cardId: Number,
-  nome: String,
-  fundo: String, 
-  nivel: Number,
-  imagem: String, 
-  alt: String,
-  descricao: String,
-  atk: Number,
-  def: Number,
-  isFlipped: Boolean,
-  isMatched: Boolean,
+  cardId: { type: Number, required: true },
+  nome: { type: String, required: true },
+  fundo: { type: String, required: true },
+  nivel: { type: Number, required: true },
+  imagem: { type: String, required: true },
+  alt: { type: String, required: true },
+  descricao: { type: String, required: true },
+  atk: { type: Number, required: true },
+  def: { type: Number, required: true },
+  isFlipped: { type: Boolean, required: true },
+  isMatched: { type: Boolean, required: true },
 });
 
 const emit = defineEmits(['flip-card']);
 
-const characterImageUrl = computed(() => {
-  if (props.imagem) {
-    return `/images/${props.imagem}`;
-  }
-  return ''; 
-});
+const characterImageUrl = computed(() => `/images/${props.imagem}`);
 
 function handleClick() {
+  if (!props.isMatched) {
     emit('flip-card', props.cardId);
+  }
+}
+</script>
+
+<style scoped>
+/* Custom scrollbar for Webkit browsers (Chrome, Safari) */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 5px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: rgba(136, 192, 208, 0.5);
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-</script>
+/* Custom scrollbar for Firefox */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(136, 192, 208, 0.5) transparent;
+}
+</style>

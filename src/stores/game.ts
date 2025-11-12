@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import type { Card } from '../types';
 
 // === DADOS BASE DOS CARDS === //
 const RAW_CARD_DATA = [
@@ -9,7 +10,7 @@ const RAW_CARD_DATA = [
     nivel: 5,
     imagem: 'cosmos.jpg',
     alt: 'Cosmos Sentinel, o Guardião Galáctico',
-    descricao: 'Este imponente guerreiro cibernético é a personificação da harmonia...',
+    descricao: 'Forjado no coração de uma nebulosa, este guerreiro cibernético é a personificação da harmonia, usando seu escudo para repelir o caos.',
     atk: 2800,
     def: 2500,
   },
@@ -20,7 +21,7 @@ const RAW_CARD_DATA = [
     nivel: 7,
     imagem: 'knight.jpg',
     alt: 'Nebuladragon, o Ser das Estrelas Eternas',
-    descricao: 'Uma criatura mítica nascida da fusão de nebulosas e energia estelar...',
+    descricao: 'Uma criatura mítica nascida da fusão de nebulosas. Suas escamas brilham com a luz de sóis distantes e seu sopro pode forjar galáxias.',
     atk: 3200,
     def: 2000,
   },
@@ -31,7 +32,7 @@ const RAW_CARD_DATA = [
     nivel: 3,
     imagem: 'cyberblade.jpg',
     alt: 'Cyberblade Paladin, o Cavaleiro Digital',
-    descricao: 'Armado com a lendária Cyberblade, este cavaleiro cibernético é um protetor...',
+    descricao: 'Armado com a lendária Cyberblade, este cavaleiro é um protetor jurado dos reinos digitais, defendendo os dados do mainframe universal.',
     atk: 2600,
     def: 2300,
   },
@@ -42,7 +43,7 @@ const RAW_CARD_DATA = [
     nivel: 7,
     imagem: 'mechadragon.jpg',
     alt: 'Mechadragon X, o Destruidor Biomecânico',
-    descricao: 'Uma fusão mortal de biologia dracônica e engenharia cibernética...',
+    descricao: 'Uma fusão de biologia dracônica e engenharia cibernética. Seus canhões de plasma foram criados para vaporizar asteroides.',
     atk: 3500,
     def: 3000,
   },
@@ -53,7 +54,7 @@ const RAW_CARD_DATA = [
     nivel: 3,
     imagem: 'magnus.jpg',
     alt: 'Archmage Stellarion, o Guardião das Estrelas',
-    descricao: 'Um mago enigmático que manipula as forças do cosmos para proteger o equilíbrio...',
+    descricao: 'Um mago que manipula as forças do cosmos para proteger o equilíbrio, tecendo feitiços poderosos com poeira estelar.',
     atk: 2400,
     def: 2600,
   },
@@ -64,147 +65,107 @@ const RAW_CARD_DATA = [
     nivel: 4,
     imagem: 'aegis.jpg',
     alt: 'Aegis Knight, o Guardião do Firmamento',
-    descricao: 'Vestindo uma armadura forjada com fragmentos de estrelas, Aegis Knight...',
+    descricao: 'Vestindo uma armadura forjada com fragmentos de estrelas, Aegis Knight é um bastião de defesa, capaz de resistir a qualquer ataque.',
     atk: 3000,
     def: 2800,
   },
   {
     pairValue: 7,
-    nome: 'Stormbringer Dragon, o Arauto das Tempestades',
+    nome: 'Solaris, a Fênix da Chama Eterna',
     fundo: 'fundo-7',
-    nivel: 5,
-    imagem: 'stormbriger.jpg',
-    alt: 'Stormbringer Dragon, o Arauto das Tempestades',
-    descricao: 'Este poderoso dragão domina os céus, invocando trovões e relâmpagos...',
-    atk: 2900,
-    def: 2100,
+    nivel: 8,
+    imagem: 'phoenix.jpg',
+    alt: 'Solaris, a Fênix da Chama Eterna',
+    descricao: 'Uma fênix imortal renascida do fogo de um sol. Sua chama purifica tudo o que toca e seu grito ecoa pela vastidão do universo.',
+    atk: 3800,
+    def: 3200,
+  },
+  {
+    pairValue: 8,
+    nome: 'Shadowfiend, o Demônio do Vazio',
+    fundo: 'fundo-8',
+    nivel: 6,
+    imagem: 'shadow.jpg',
+    alt: 'Shadowfiend, o Demônio do Vazio',
+    descricao: 'Uma entidade de pura escuridão que consome a luz. Ele se esconde nas sombras entre as estrelas, esperando o momento de atacar.',
+    atk: 3400,
+    def: 2900,
   },
 ];
 
-// === FUNÇÃO DE EMBARALHAR === //
-const shuffleArray = (array: any[]) => {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-};
+interface GameState {
+  cards: Card[];
+  flippedCards: Card[];
+  score: number;
+  moves: number;
+  isGameOver: boolean;
+}
 
-// === PINIA STORE === //
 export const useGameStore = defineStore('game', {
-  state: () => ({
-    cards: [] as any[],
-    flipCardIds: [] as number[],
+  state: (): GameState => ({
+    cards: [],
+    flippedCards: [],
     score: 0,
-    isGameActive: false,
     moves: 0,
-    currentCardIndex: 0,
+    isGameOver: false,
   }),
-
-  getters: {
-    canFlipCard: (state) => state.flipCardIds.length < 2 && state.isGameActive,
-
-    isGameOver: (state) =>
-      state.cards.length > 0 && state.cards.every((c) => c.isMatched),
-
-    // Card atual (para o SliderNavigator)
-    currentCard(state) {
-      const card = state.cards[state.currentCardIndex];
-      if (!card) return null;
-
-      const contentUrl = `${import.meta.env.BASE_URL}images/${card.imagem}`;
-
-      return {
-        ...card,
-        cardId: card.id,
-        cardState: card.isFlipped
-          ? 'flipped'
-          : card.isMatched
-          ? 'matched'
-          : 'default',
-        contentUrl,
-      };
-    },
-  },
 
   actions: {
     initializeGame() {
-      this.isGameActive = false;
-      this.flipCardIds = [];
+      const duplicatedCards = [...RAW_CARD_DATA, ...RAW_CARD_DATA];
+      const shuffledCards: Card[] = duplicatedCards
+        .map((card, index) => ({
+          ...card,
+          id: index,
+          isFlipped: false,
+          isMatched: false,
+        }))
+        .sort(() => Math.random() - 0.5);
+
+      this.cards = shuffledCards;
+      this.flippedCards = [];
       this.score = 0;
       this.moves = 0;
-      this.currentCardIndex = 0;
-
-      let baseCards: any[] = [];
-      let uniqueIdCounter = 0;
-
-      RAW_CARD_DATA.forEach((data) => {
-        for (let i = 0; i < 2; i++) {
-          baseCards.push({
-            id: uniqueIdCounter++,
-            ...data,
-            isFlipped: false,
-            isMatched: false,
-          });
-        }
-      });
-
-      this.cards = shuffleArray(baseCards);
-      this.isGameActive = true;
+      this.isGameOver = false;
     },
 
     flipCard(cardId: number) {
-      if (!this.isGameActive || !this.canFlipCard) return;
+      if (this.flippedCards.length >= 2) return;
 
-      const card = this.cards.find((c) => c.id === cardId);
-      if (!card || card.isFlipped || card.isMatched) return;
+      const card = this.cards.find(c => c.id === cardId);
+      if (card && !card.isFlipped) {
+        card.isFlipped = true;
+        this.flippedCards.push(card);
+      }
 
-      card.isFlipped = true;
-      this.flipCardIds.push(cardId);
-
-      if (this.flipCardIds.length === 2) {
+      if (this.flippedCards.length === 2) {
         this.moves++;
-        setTimeout(() => this.checkForMatch(), 1000);
+        setTimeout(() => {
+          this.checkForMatch();
+        }, 1000);
       }
     },
 
     checkForMatch() {
-      const [id1, id2] = this.flipCardIds;
-      const card1 = this.cards.find((c) => c.id === id1);
-      const card2 = this.cards.find((c) => c.id === id2);
+      const [card1, card2] = this.flippedCards;
 
-      if (card1 && card2 && card1.pairValue === card2.pairValue) {
+      if (card1.pairValue === card2.pairValue) {
         card1.isMatched = true;
         card2.isMatched = true;
         this.score += 10;
       } else {
-        if (card1) card1.isFlipped = false;
-        if (card2) card2.isFlipped = false;
+        card1.isFlipped = false;
+        card2.isFlipped = false;
       }
 
-      this.flipCardIds = [];
+      this.flippedCards = [];
+      this.checkGameOver();
+    },
 
-      if (this.isGameOver) {
-        this.isGameActive = false;
-        alert(`Fim de Jogo! Pontuação: ${this.score}. Movimentos: ${this.moves}.`);
+    checkGameOver() {
+      if (this.cards.every(card => card.isMatched)) {
+        this.isGameOver = true;
       }
-    },
-
-    // === SLIDER CONTROLES === //
-    nextCard() {
-      if (this.cards.length === 0) return;
-      this.currentCardIndex =
-        this.currentCardIndex < this.cards.length - 1
-          ? this.currentCardIndex + 1
-          : 0;
-    },
-
-    previousCard() {
-      if (this.cards.length === 0) return;
-      this.currentCardIndex =
-        this.currentCardIndex > 0
-          ? this.currentCardIndex - 1
-          : this.cards.length - 1;
     },
   },
 });
