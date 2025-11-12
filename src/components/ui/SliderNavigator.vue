@@ -1,63 +1,68 @@
 <template>
-  <div class="flex items-center justify-center gap-20 h-full">
+  <div class="flex items-center justify-center gap-4 md:gap-8 w-full">
     <!-- Botão Voltar -->
     <button
-      class="w-[70px] h-[70px] flex items-center justify-center rounded-full bg-cyan-500/20 hover:bg-cyan-400/70 transition-all duration-300 shadow-[0_4px_15px_rgba(0,0,0,0.2),inset_0_0_0_3px_rgba(255,255,255,0.8)] backdrop-blur-md"
       @click="previousCard"
+      class="flex-shrink-0 w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-full bg-slate-700/50 hover:bg-cyan-500/70 transition-all duration-300 shadow-lg backdrop-blur-sm border border-cyan-400/50"
     >
       <img
         src="/images/seta.png"
-        alt="seta voltar"
-        class="w-10 h-10 invert rotate-180 transition-transform duration-300"
+        alt="Anterior"
+        class="w-6 h-6 md:w-8 md:h-8 invert transform rotate-180"
       />
     </button>
 
     <!-- Card Atual -->
-    <FlipCard
-      v-if="currentCard"
-      :card-id="currentCard.cardId"
-      :fundo="currentCard.fundo"
-      :is-matched="currentCard.isMatched"
-      :card-state="currentCard.cardState"
-      :content-url="currentCard.contentUrl"
-      :alt="currentCard.alt"
-      :nivel="currentCard.nivel"
-      :descricao="currentCard.descricao"
-      :atk="currentCard.atk"
-      :def="currentCard.def"
-      @click-event="handleFlip"
-    />
+    <div class="w-64 h-96">
+      <FlipCard
+        v-if="currentCard"
+        :key="currentCard.cardId" 
+        :card-id="currentCard.cardId"
+        :nome="currentCard.nome"
+        :fundo="currentCard.fundo"
+        :nivel="currentCard.nivel"
+        :imagem="currentCard.imagem"
+        :alt="currentCard.alt"
+        :descricao="currentCard.descricao"
+        :atk="currentCard.atk"
+        :def="currentCard.def"
+        :is-flipped="true" 
+        :is-matched="false"
+      />
+      <div v-else class="text-white text-center">
+        Carregando cartas...
+      </div>
+    </div>
 
     <!-- Botão Avançar -->
     <button
-      class="w-[70px] h-[70px] flex items-center justify-center rounded-full bg-cyan-500/20 hover:bg-cyan-400/70 transition-all duration-300 shadow-[0_4px_15px_rgba(0,0,0,0.2),inset_0_0_0_3px_rgba(255,255,255,0.8)] backdrop-blur-md"
       @click="nextCard"
+      class="flex-shrink-0 w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-full bg-slate-700/50 hover:bg-cyan-500/70 transition-all duration-300 shadow-lg backdrop-blur-sm border border-cyan-400/50"
     >
       <img
         src="/images/seta.png"
-        alt="seta avançar"
-        class="w-10 h-10 invert transition-transform duration-300"
+        alt="Avançar"
+        class="w-6 h-6 md:w-8 md:h-8 invert"
       />
     </button>
   </div>
 </template>
 
-<script setup>
-import { computed, onMounted } from "vue";
-import FlipCard from "@/components/game/FlipCard.vue";
-import { useGameStore } from "@/stores/game";
+<script setup lang="ts">
+import { computed, onMounted } from 'vue';
+import { useGameStore } from '@/stores/game';
+import FlipCard from '@/components/game/FlipCard.vue';
 
 const gameStore = useGameStore();
 
-onMounted(() => {
-  gameStore.initializeGame();
-});
-
 const currentCard = computed(() => gameStore.currentCard);
 
-function handleFlip() {
-  gameStore.flipCard(currentCard.value.cardId);
-}
+// Garante que os dados das cartas sejam carregados quando o componente for montado
+onMounted(() => {
+  if (gameStore.cards.length === 0) {
+    gameStore.initializeGame();
+  }
+});
 
 function nextCard() {
   gameStore.nextCard();
