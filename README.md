@@ -74,7 +74,7 @@ Além de entreter, este projeto demonstra como **Vue.js** pode ser usado para cr
 git clone https://github.com/Domisnnet/drakonik-nexus.git
 
 # Acesse o diretório
-cd Shadow-Flip-Oh-Vue/shadow-flip-oh
+cd drakonik-nexus
 
 # Instale as dependências
 npm install
