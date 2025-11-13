@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import type { Card } from '../types';
 
 // === DADOS BASE DOS CARDS === //
-const RAW_CARD_DATA: Card[] = [
+const RAW_CARD_DATA: Omit<Card, 'id' | 'isFlipped' | 'isMatched'>[] = [
   {
     pairValue: 1,
     nome: 'Cosmos Sentinel, o Guardião Galáctico',
@@ -72,7 +72,8 @@ const RAW_CARD_DATA: Card[] = [
 ];
 
 interface GameState {
-  cards: Card[];
+  cards: Card[]; // Para o jogo da memória (16 cartas)
+  uniqueCards: Card[]; // Para o carrossel (8 cartas)
   flippedCards: Card[];
   score: number;
   moves: number;
@@ -82,6 +83,7 @@ interface GameState {
 export const useGameStore = defineStore('game', {
   state: (): GameState => ({
     cards: [],
+    uniqueCards: [],
     flippedCards: [],
     score: 0,
     moves: 0,
@@ -90,13 +92,21 @@ export const useGameStore = defineStore('game', {
 
   actions: {
     initializeGame() {
-      const duplicatedCards = [...RAW_CARD_DATA, ...RAW_CARD_DATA];
+      // 1. Preenche a lista de cartas únicas para o carrossel
+      this.uniqueCards = RAW_CARD_DATA.map((card, index) => ({
+        ...card,
+        id: index, // ID único de 0 a 7
+        isFlipped: true, // No carrossel, a carta está sempre virada
+        isMatched: false,
+      }));
+
+      // 2. Prepara as cartas para o jogo da memória
+      const duplicatedCards = [...this.uniqueCards, ...this.uniqueCards];
       const shuffledCards: Card[] = duplicatedCards
         .map((card, index) => ({
           ...card,
-          id: index,
-          isFlipped: false,
-          isMatched: false,
+          id: index, // ID único de 0 a 15 para o v-for
+          isFlipped: false, // No jogo, começam viradas para baixo
         }))
         .sort(() => Math.random() - 0.5);
 
@@ -110,8 +120,8 @@ export const useGameStore = defineStore('game', {
     flipCard(cardId: number) {
       if (this.flippedCards.length >= 2) return;
 
-      const card = this.cards.find((c: { id: number; }) => c.id === cardId);
-      if (card && !card.isFlipped) {
+      const card = this.cards.find(c => c.id === cardId);
+      if (card && !card.isFlipped && !card.isMatched) {
         card.isFlipped = true;
         this.flippedCards.push(card);
       }
@@ -141,7 +151,7 @@ export const useGameStore = defineStore('game', {
     },
 
     checkGameOver() {
-      if (this.cards.every((card: { isMatched: any; }) => card.isMatched)) {
+      if (this.cards.length > 0 && this.cards.every(card => card.isMatched)) {
         this.isGameOver = true;
       }
     },

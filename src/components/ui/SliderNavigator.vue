@@ -8,9 +8,8 @@
     <div class="w-64 h-96 cursor-pointer select-none">
       <FlipCard
         v-if="currentCard"
-        :key="currentCard.id" 
-        :card-id="currentCard.id"
-        :pair-value="currentCard.pairValue"
+        :key="currentCard.id"
+        :id="currentCard.id"
         :nome="currentCard.nome"
         :fundo="currentCard.fundo"
         :nivel="currentCard.nivel"
@@ -33,39 +32,41 @@
 import { ref, computed, onMounted } from 'vue';
 import { useGameStore } from '@/stores/game';
 import FlipCard from '@/components/game/FlipCard.vue';
+import type { Card } from '@/types';
 
 const gameStore = useGameStore();
 
-// Lógica para encontrar o card a ser exibido
 const currentCardIndex = ref(0);
-const currentCard = computed(() => {
-  if (gameStore.cards.length > 0) {
-    return gameStore.cards[currentCardIndex.value];
+
+// Agora usamos a lista de cartas únicas diretamente da store
+const currentCard = computed<Card | null>(() => {
+  if (gameStore.uniqueCards.length > 0) {
+    return gameStore.uniqueCards[currentCardIndex.value];
   }
   return null;
 });
 
 // Garante que os dados das cartas sejam carregados
 onMounted(() => {
-  if (gameStore.cards.length === 0) {
+  if (gameStore.uniqueCards.length === 0) {
     gameStore.initializeGame(); 
   }
 });
 
-// Funções de navegação
+// Funções de navegação, agora muito mais simples
 function nextCard() {
-  if (gameStore.cards.length > 0) {
-    currentCardIndex.value = (currentCardIndex.value + 1) % gameStore.cards.length;
+  if (gameStore.uniqueCards.length > 0) {
+    currentCardIndex.value = (currentCardIndex.value + 1) % gameStore.uniqueCards.length;
   }
 }
 
 function previousCard() {
-  if (gameStore.cards.length > 0) {
-    currentCardIndex.value = (currentCardIndex.value - 1 + gameStore.cards.length) % gameStore.cards.length;
+  if (gameStore.uniqueCards.length > 0) {
+    currentCardIndex.value = (currentCardIndex.value - 1 + gameStore.uniqueCards.length) % gameStore.uniqueCards.length;
   }
 }
 
-// Lógica de Swipe
+// Lógica de Swipe (permanece a mesma e correta)
 const touchStartX = ref(0);
 const touchThreshold = 50; // Distância mínima de swipe em pixels
 

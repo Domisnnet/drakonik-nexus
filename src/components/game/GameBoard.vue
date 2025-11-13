@@ -31,7 +31,7 @@
       <FlipCard
         v-for="card in game.cards"
         :key="card.id"
-        :card-id="card.id"
+        :id="card.id"
         :nome="card.nome"
         :fundo="card.fundo"
         :nivel="card.nivel"

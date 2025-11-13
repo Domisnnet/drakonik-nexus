@@ -53,7 +53,7 @@
 import { computed } from 'vue';
 
 const props = defineProps({
-  cardId: { type: Number, required: true },
+  id: { type: Number, required: true },
   nome: { type: String, required: true },
   fundo: { type: String, required: true },
   nivel: { type: Number, required: true },
@@ -71,7 +71,7 @@ const characterImageUrl = computed(() => `/images/${props.imagem}`);
 
 function handleClick() {
   if (!props.isMatched) {
-    emit('flip-card', props.cardId);
+    emit('flip-card', props.id);
   }
 }
 </script>
