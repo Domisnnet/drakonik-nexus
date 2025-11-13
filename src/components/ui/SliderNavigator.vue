@@ -36,17 +36,12 @@ import FlipCard from '@/components/game/FlipCard.vue';
 import type { Card } from '@/types';              
 
 const gameStore = useGameStore();
-
 const currentCardIndex = ref(0);
 
 const currentCard = computed<Card | null>(() => {
-  if (gameStore.uniqueCards.length > 0) {
-    return gameStore.uniqueCards[currentCardIndex.value];
-  }
-  return null;
+  return gameStore.uniqueCards[currentCardIndex.value] ?? null;
 });
 
-// Garante que os dados das cartas sejam carregados
 onMounted(() => {
   if (gameStore.uniqueCards.length === 0) {
     gameStore.initializeGame(); 
@@ -70,13 +65,15 @@ const touchStartX = ref(0);
 const touchThreshold = 50; 
 
 function handleTouchStart(event: TouchEvent) {
-  if (event.changedTouches.length === 0) return;
-  touchStartX.value = event.changedTouches[0].screenX;
+  const touch = event.changedTouches[0];
+  if (!touch) return;
+  touchStartX.value = touch.screenX;
 }
 
 function handleTouchEnd(event: TouchEvent) {
-  if (event.changedTouches.length === 0) return;
-  const touchEndX = event.changedTouches[0].screenX;
+  const touch = event.changedTouches[0];
+  if (!touch) return;
+  const touchEndX = touch.screenX;
   const deltaX = touchEndX - touchStartX.value;
 
   if (deltaX > touchThreshold) {
