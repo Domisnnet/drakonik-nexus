@@ -6,6 +6,7 @@
     "start": "vite",
     "dev": "vite",
     "build": "vite build",
+    "build:gh": "vite build --base=/drakonik-nexus/",
     "preview": "vite preview",
     "lint": "eslint --ext .ts,.vue src",
     "format": "prettier --write \"src/**/*.{ts,vue,js,css,md}\"",
