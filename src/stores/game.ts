@@ -97,22 +97,26 @@ export const useGameStore = defineStore('game', {
 
   actions: {
     initializeGame() {
-      this.uniqueCards = RAW_CARD_DATA.map((card, index): Card => ({
-        ...card,
-        id: index,
-        isFlipped: true,
-        isMatched: false,
-      }));
+      this.uniqueCards = RAW_CARD_DATA.map(
+        (card, index): Card => ({
+          ...card,
+          id: index,
+          isFlipped: true,
+          isMatched: false,
+        })
+      );
 
       const duplicatedCards = [...this.uniqueCards, ...this.uniqueCards];
 
       const shuffledCards = duplicatedCards
-        .map((card, index): Card => ({
-          ...card,
-          id: index,
-          isFlipped: false,
-          isMatched: false,
-        }))
+        .map(
+          (card, index): Card => ({
+            ...card,
+            id: index,
+            isFlipped: false,
+            isMatched: false,
+          })
+        )
         .sort(() => Math.random() - 0.5);
 
       this.cards = shuffledCards;
@@ -125,7 +129,7 @@ export const useGameStore = defineStore('game', {
     flipCard(cardId: number) {
       if (this.flippedCards.length >= 2) return;
 
-      const card = this.cards.find((c) => c.id === cardId);
+      const card = this.cards.find(c => c.id === cardId);
       if (card && !card.isFlipped && !card.isMatched) {
         card.isFlipped = true;
         this.flippedCards.push(card);
@@ -158,7 +162,7 @@ export const useGameStore = defineStore('game', {
     },
 
     checkGameOver() {
-      if (this.cards.length > 0 && this.cards.every((card) => card.isMatched)) {
+      if (this.cards.length > 0 && this.cards.every(card => card.isMatched)) {
         this.isGameOver = true;
       }
     },

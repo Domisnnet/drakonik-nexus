@@ -48,16 +48,14 @@ onMounted(() => {
 
 function nextCard() {
   if (gameStore.uniqueCards.length > 0) {
-    currentCardIndex.value =
-      (currentCardIndex.value + 1) % gameStore.uniqueCards.length;
+    currentCardIndex.value = (currentCardIndex.value + 1) % gameStore.uniqueCards.length;
   }
 }
 
 function previousCard() {
   if (gameStore.uniqueCards.length > 0) {
     currentCardIndex.value =
-      (currentCardIndex.value - 1 + gameStore.uniqueCards.length) %
-      gameStore.uniqueCards.length;
+      (currentCardIndex.value - 1 + gameStore.uniqueCards.length) % gameStore.uniqueCards.length;
   }
 }
 
