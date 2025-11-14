@@ -12,7 +12,8 @@
   idx = {
     # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
     extensions = [
-      "vue.volar",
+      "vue.volar"npm install -D eslint-plugin-prettier
+,
       "google.gemini-cli-vscode-ide-companion"
     ];
     workspace = {
