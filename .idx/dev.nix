@@ -3,29 +3,34 @@
 { pkgs, ... }: {
   # Which nixpkgs channel to use.
   channel = "stable-24.05"; # or "unstable"
-  # Use https://search.nixos.org/packages to find packages
+
+  # Packages to install
   packages = [
     pkgs.nodejs_22
   ];
-  # Sets environment variables in the workspace
+
+  # Environment variables
   env = {};
+
   idx = {
-    # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
     extensions = [
-      "vue.volar"npm install -D eslint-plugin-prettier
-,
+      "vue.volar"
       "google.gemini-cli-vscode-ide-companion"
     ];
+
     workspace = {
-      # Runs when a workspace is first created with this `dev.nix` file
+      # Runs when a workspace is first created with this dev.nix file
       onCreate = {
         npm-install = "npm ci --no-audit --prefer-offline --no-progress --timing";
-        # Open editors for the following files by default, if they exist:
+
+        # If you want to install eslint-plugin-prettier automatically, add here:
+        # eslint-install = "npm install -D eslint-plugin-prettier";
+        
         default.openFiles = [ "src/App.vue" ];
       };
-      # To run something each time the workspace is (re)started, use the `onStart` hook
     };
-    # Enable previews and customize configuration
+
+    # Enable previews
     previews = {
       enable = true;
       previews = {
