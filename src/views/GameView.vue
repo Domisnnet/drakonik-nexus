@@ -105,7 +105,7 @@ const restartGame = () => {
   gameStore.initializeGame();
 };
 
-const formattedTime = computed(() => {
+const formattedTime = computed(() => { // lógica do Timmer
   const minutes = Math.floor(gameStore.remainingTime / 60);
   const seconds = gameStore.remainingTime % 60;
   return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
