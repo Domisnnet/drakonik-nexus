@@ -24,8 +24,9 @@ Drakonik Nexus é um jogo da memória interativo construído como uma Single-Pag
   - Se as cartas formam um par, elas permanecem viradas e a pontuação aumenta.
   - Se não formam um par, elas são viradas de volta após um breve intervalo.
 - **Painel de Status**: Exibe a pontuação, o número de movimentos e o tempo restante em tempo real.
-- **Cronômetro Regressivo**: 
+- **Cronômetro Regressivo com Alerta**: 
   - Um cronômetro de 2 minutos inicia na primeira jogada.
+  - **Nos últimos 30 segundos, o cronômetro fica vermelho e pulsa para criar um senso de urgência.**
   - Se o tempo acabar, o jogo termina.
 - **Fim de Jogo Centralizado**: 
   - Modais de tela cheia consistentes para condições de vitória ou tempo esgotado.
@@ -36,20 +37,15 @@ Drakonik Nexus é um jogo da memória interativo construído como uma Single-Pag
 
 ## Plano de Desenvolvimento (Última Modificação)
 
-**Objetivo:** Corrigir um conflito de UI onde múltiplas mensagens de fim de jogo eram exibidas simultaneamente e unificar a experiência do usuário.
+**Objetivo:** Adicionar um feedback visual de urgência no cronômetro durante os 30 segundos finais.
 
 **Passos Concluídos:**
 
-1.  **Remoção de UI Duplicada:**
-    - O modal de vitória que existia dentro do componente `src/components/game/GameBoard.vue` foi completamente removido. Este era o causador do conflito visual.
+1.  **Estilização Condicional em `GameView.vue`**:
+    - Foi adicionada uma diretiva `:class` ao elemento de parágrafo que exibe o tempo no painel de status.
+    - Esta diretiva aplica condicionalmente as classes do Tailwind CSS `text-red-500` e `animate-pulse`.
+    - A condição para ativar o estilo de alerta é quando o tempo restante (`gameStore.remainingTime`) é menor ou igual a 30 segundos e maior que zero.
+    - Isso cria um efeito visual que aumenta a tensão e a interatividade nos momentos finais do jogo.
 
-2.  **Centralização da Lógica de UI em `GameView.vue`**:
-    - O componente `src/views/GameView.vue` agora é o único responsável por exibir as mensagens de fim de jogo.
-    - Os banners de alerta que existiam anteriormente foram substituídos por modais de tela cheia, melhorando a experiência visual.
-    - Foram criados dois modais distintos:
-      - Um para a condição de **vitória** (`isGameOver && !isTimeUp`).
-      - Um para a condição de **tempo esgotado** (`isTimeUp`).
-    - Isso garante que apenas um modal seja exibido por vez e que a aparência seja consistente em todos os cenários de fim de jogo.
-
-3.  **Atualização do `blueprint.md`**:
-    - O documento foi atualizado para refletir a correção do bug e a nova arquitetura centralizada dos modais de fim de jogo.
+2.  **Atualização do `blueprint.md`**:
+    - O documento foi atualizado para incluir o "Cronômetro Regressivo com Alerta" na lista de funcionalidades implementadas, descrevendo o novo comportamento.

@@ -17,7 +17,12 @@
         </div>
         <div class="text-center">
           <span class="text-xs text-cyan-300 uppercase font-semibold">Tempo</span>
-          <p class="text-xl md:text-2xl font-bold">{{ formattedTime }}</p>
+          <p 
+            class="text-xl md:text-2xl font-bold transition-colors duration-300"
+            :class="{ 'text-red-500 animate-pulse': gameStore.remainingTime <= 30 && gameStore.remainingTime > 0 }"
+          >
+            {{ formattedTime }}
+          </p>
         </div>
       </div>
       <div class="flex gap-2">
