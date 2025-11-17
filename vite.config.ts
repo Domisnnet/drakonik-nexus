@@ -4,7 +4,7 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/drakonik-nexus/',  
+  base: '/drakonik-nexus/', // para alternar deploy no Firebase Hosting esta linha deve ser comentada 
   plugins: [
     vue(),
   ],
