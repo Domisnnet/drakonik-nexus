@@ -94,7 +94,7 @@ O jogo ficará disponível em [http://localhost:5173](http://localhost:5173)
 
 O projeto está disponível para jogar online nos seguintes links:
 
-<p align="left"><a href="https://drakonik-nexus-75177593-75741.web.app/" target="_blank" rel="noopener noreferrer" style="text-decoration: none; vertical-align: top;"><img src="https://github.com/Domisnnet/drakonik-nexus/blob/main/src/assets/images/firebase_badge.svg" alt="Deploy to Firebase Hosting" width="100" style="border: none; vertical-align: top;"></a>&nbsp;&nbsp;<a href="https://domisnnet.github.io/drakonik-nexus/" target="_blank" rel="noopener noreferrer" style="text-decoration: none; vertical-align: top;"><img src="https://github.com/Domisnnet/drakonik-nexus/blob/main/src/assets/images/github_badge.svg" alt="Deploy to GitHub Pages" width="125" style="border: none; vertical-align: top;"></a></p>
+<p align="left"><a href="https://drakonik-nexus-75177593-75741.web.app/" target="_blank" rel="noopener noreferrer" style="text-decoration: none; vertical-align: top;"><img src="https://github.com/Domisnnet/drakonik-nexus/blob/main/src/assets/images/firebase_badge.svg" alt="Deploy to Firebase Hosting" width="100" style="border: none; vertical-align: top;"></a>&nbsp;&nbsp;<a href="https://domisnnet.github.io/Drakonik-Nexus/Vue" target="_blank" rel="noopener noreferrer" style="text-decoration: none; vertical-align: top;"><img src="https://github.com/Domisnnet/drakonik-nexus/blob/main/src/assets/images/github_badge.svg" alt="Deploy to GitHub Pages" width="125" style="border: none; vertical-align: top;"></a></p>
 
 ---
 
