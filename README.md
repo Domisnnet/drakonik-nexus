@@ -1,4 +1,4 @@
-![Drakonik Nexus!](https://github.com/Domisnnet/drakonik-nexus/blob/main/src/assets/images/drakonik-nexus.png)
+![Drakonik Nexus!](https://github.com/Domisnnet/Drakonik-Nexus-Vue/blob/main/src/assets/images/drakonik-nexus.png)
 
 ---
 
@@ -22,7 +22,7 @@
 
 ## 1. 🎮 **Sobre o Projeto**
 
-**Shadow-Flip-Oh-Vue** é um jogo da memória com temática inspirada no universo de Yu-Gi-Oh!  
+**Drakonik-Nexus-Vue** é um jogo da memória com temática inspirada no universo de Yu-Gi-Oh!  
 O objetivo é simples: encontrar todos os pares de cartas no menor tempo possível.  
 Além de entreter, este projeto demonstra como **Vue.js** pode ser usado para criar interfaces dinâmicas e envolventes.
 
@@ -71,10 +71,10 @@ Além de entreter, este projeto demonstra como **Vue.js** pode ser usado para cr
 
 ```bash
 # Clone o repositório
-git clone https://github.com/Domisnnet/drakonik-nexus.git
+git clone https://github.com/Domisnnet/Drakonik-Nexus-Vue.git
 
 # Acesse o diretório
-cd drakonik-nexus
+cd Drakonik-Nexus-Vue
 
 # Instale as dependências
 npm install
@@ -94,7 +94,7 @@ O jogo ficará disponível em [http://localhost:5173](http://localhost:5173)
 
 O projeto está disponível para jogar online nos seguintes links:
 
-<p align="left"><a href="https://drakonik-nexus-75177593-75741.web.app/" target="_blank" rel="noopener noreferrer" style="text-decoration: none; vertical-align: top;"><img src="https://github.com/Domisnnet/drakonik-nexus/blob/main/src/assets/images/firebase_badge.svg" alt="Deploy to Firebase Hosting" width="100" style="border: none; vertical-align: top;"></a>&nbsp;&nbsp;<a href="https://domisnnet.github.io/drakonik-nexus/" target="_blank" rel="noopener noreferrer" style="text-decoration: none; vertical-align: top;"><img src="https://github.com/Domisnnet/drakonik-nexus/blob/main/src/assets/images/github_badge.svg" alt="Deploy to GitHub Pages" width="125" style="border: none; vertical-align: top;"></a></p>
+<p align="left"><a href="https://drakonik-nexus-75177593-75741.web.app/" target="_blank" rel="noopener noreferrer" style="text-decoration: none; vertical-align: top;"><img src="https://github.com/Domisnnet/Drakonik-Nexus-Vue/blob/main/src/assets/images/firebase_badge.svg" alt="Deploy to Firebase Hosting" width="100" style="border: none; vertical-align: top;"></a>&nbsp;&nbsp;<a href="https://domisnnet.github.io/Drakonik-Nexus-Vue/" target="_blank" rel="noopener noreferrer" style="text-decoration: none; vertical-align: top;"><img src="https://github.com/Domisnnet/Drakonik-Nexus-Vue/blob/main/src/assets/images/github_badge.svg" alt="Deploy to GitHub Pages" width="125" style="border: none; vertical-align: top;"></a></p>
 
 ---
 
@@ -113,7 +113,7 @@ git checkout -b minha-feature
 ## 8. 🧠 Perguntas Frequentes
 
 <details>
-<summary>O que é o Drakonik-Nexus! ❓</summary>
+<summary>O que é o Drakonik-Nexus-Vue ❓</summary>
 
 - Um jogo de cartas da memória com estética inspirada em Yu-Gi-Oh!, feito com Vue.js e Vite.
 
@@ -130,8 +130,8 @@ git checkout -b minha-feature
 <summary>Como atualizar as versões publicadas (deploy) ❓</summary>
 
 - O projeto está configurado para dois ambientes: **Firebase Hosting** e **GitHub Pages**. Antes de fazer o deploy, é crucial configurar o arquivo `vite.config.ts` corretamente:
-  - **Para o Firebase Hosting**: **Comente** a linha `base: '/Drakonik Nexus/'`. Em seguida, rode `npm run build` e faça o deploy da pasta `dist`.
-  - **Para o GitHub Pages**: **Descomente** a linha `base: '/Drakonik-Nexus/'`. Em seguida, rode o script `./deploy.sh`.
+  - **Para o Firebase Hosting**: **Comente** a linha `base: '/Drakonik-Nexus-Vue/'`. Em seguida, rode `npm run build` e faça o deploy da pasta `dist`.
+  - **Para o GitHub Pages**: **Descomente** a linha `base: '/Drakonik-Nexus-Vue/'`. Em seguida, rode o script `./deploy.sh`.
 
 </details>
 
@@ -162,5 +162,5 @@ Explore, contribua e divirta-se criando sua própria versão do duelo de memóri
 ## Para conhecer meu Repositório:
 
 <a href="https://github.com/Domisnnet">
-    <img src="https://github.com/Domisnnet/drakonik-nexus/blob/main/src/assets/images/DomisDev.png" width="150px" height="150px" alt="Acessar perfil GitHub">
+    <img src="https://github.com/Domisnnet/Drakonik-Nexus-Vue/blob/main/src/assets/images/DomisDev.png" width="150px" height="150px" alt="Acessar perfil GitHub">
 </a>
